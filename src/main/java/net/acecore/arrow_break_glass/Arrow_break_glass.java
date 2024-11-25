@@ -12,21 +12,21 @@ import java.util.List;
 import java.util.Properties;
 
 public final class Arrow_break_glass extends JavaPlugin {
-
+    public static final String saveFolderPath = "plugins/arrow-break-glass";
+    private static final String  mkdir_path = saveFolderPath + "/logs";
     @Override
     public void onEnable() {
         // Plugin startup logic
         // location.json ファイルが存在しない場合は作成
-        // 保存先のフォルダパス (適宜変更)
-        String saveFolderPath = "plugins/arrow-break-glass";
-        File saveFolder = new File(saveFolderPath);
+        File saveFolder = new File(mkdir_path);
+
         saveFolder.mkdirs();
         List<String> filenames = glasses.get_all_glasses_name();
         String filePath;
         Properties properties = new Properties();
         for (String i : filenames) {
             properties.setProperty(i, String.valueOf(true));
-            filePath = saveFolderPath + "/" + i + ".csv";
+            filePath = saveFolderPath + "/logs/" + i + ".csv";
             File save_file = new File(filePath);
             if(!save_file.exists()){
                 try {
@@ -42,6 +42,7 @@ public final class Arrow_break_glass extends JavaPlugin {
             try {
                 setting_dataFile.createNewFile();
                 getLogger().info("setting.properties ファイルを作成しました");
+                can_break_block.reset();
                 try (OutputStream out = new FileOutputStream(setting_filePath)) {
                     properties.store(out, "settings");
                 }catch (IOException e){
@@ -51,6 +52,9 @@ public final class Arrow_break_glass extends JavaPlugin {
                 getLogger().severe("setting.properties ファイルの作成に失敗しました: " + e.getMessage());
             }
         }
+        Bukkit.getServer().getPluginManager().registerEvents(new test(), this);//TODO:最後に削除
+        Bukkit.getServer().getPluginManager().registerEvents(new main(), this);
+        can_break_block.read();
     }
 
     @Override
