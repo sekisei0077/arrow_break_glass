@@ -1,0 +1,4 @@
+name: arrow_break_glass
+version: '1.0-SNAPSHOT'
+main: net.acecore.arrow_break_glass.Arrow_break_glass
+api-version: '1.21'
